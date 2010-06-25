@@ -1,0 +1,8 @@
+## Interface: 30300
+## Title: BlizzardSucks 
+## Notes: Fixes UI bugs 
+## Author: Shefki
+## DefaultState: enabled
+## Version: @project-version@
+
+BlizzardSucks.lua
