@@ -18,3 +18,11 @@ local function FixMenuFrameLevels()
 	end  
 end
 hooksecurefunc("UIDropDownMenu_CreateFrames", FixMenuFrameLevels)
+
+-- Fix incorrect translations in the German Locale.  For whatever reason
+-- Blizzard changed the oneletter time abbreviations to be 3 letter in
+-- the German Locale.
+if GetLocale() == "deDE" then
+	MINUTE_ONLETTER_ABBR = "%d m"
+	DAY_ONELETTER_ABBR = "%d d"
+end
