@@ -23,7 +23,7 @@ hooksecurefunc("UIDropDownMenu_CreateFrames", FixMenuFrameLevels)
 -- Blizzard changed the oneletter time abbreviations to be 3 letter in
 -- the German Locale.
 if GetLocale() == "deDE" then
-	MINUTE_ONLETTER_ABBR = "%d m"
+	MINUTE_ONELETTER_ABBR = "%d m"
 	DAY_ONELETTER_ABBR = "%d d"
 end
 
