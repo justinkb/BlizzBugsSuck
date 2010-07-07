@@ -87,7 +87,13 @@ local BNSendWhisper_orig = _G.BNSendWhisper
 local BNIsSelf = BNIsSelf
 function BNSendWhisper(presenceID, ...)
 	if BNIsSelf(presenceID) then
-		print("|cffff0000WARNING: An AddOn attempted to discover your Real Name, BlizzSucks has blocked this.")
+		local ds = debugstack(2,1,0)
+		local addon = ds:match("Interface\\AddOns\\([^\\]*)\\")
+		if not addon then
+			print("|cffff0000WARNING: An unknown AddOn attempted to discover your Real Name, BlizzSucks has blocked this.")
+		else
+			print(string.format("|cffff0000WARNING: The AddOn '%s' attempted to discover your Real Name, BlizzSucks has blocked this.",addon))
+		end
 		return
 	end
 	return BNSendWhisper_orig(presenceID, ...)
