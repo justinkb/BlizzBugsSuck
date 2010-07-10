@@ -29,7 +29,7 @@ end
 
 -- fixes the issue with InterfaceOptionsFrame_OpenToCategory not actually opening the Category (and not even scrolling to it)
 do
-	doNotRun = false
+	local doNotRun = false
 	local function InterfaceOptionsFrame_OpenToCategory_Fix(panel)
 		if InCombatLockdown() then return end
 		if doNotRun then
