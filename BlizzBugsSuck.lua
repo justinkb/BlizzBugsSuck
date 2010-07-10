@@ -80,21 +80,3 @@ do
 	end
 	hooksecurefunc("InterfaceOptionsFrame_OpenToCategory", function(panel) return InterfaceOptionsFrame_OpenToCategory_Fix(panel) end)
 end
-
--- Block BNSendWhisper from being able to whisper yourself and thus exposing your RealName.
-local BNSendWhisper_orig = _G.BNSendWhisper
--- Upvalue BNIsSelf to prevent some clever AddOn from changing it to lie to us.
-local BNIsSelf = BNIsSelf
-function BNSendWhisper(presenceID, ...)
-	if BNIsSelf(presenceID) then
-		local ds = debugstack(2,1,0)
-		local addon = ds:match("Interface\\AddOns\\([^\\]*)\\")
-		if not addon then
-			print("|cffff0000WARNING: An unknown AddOn attempted to discover your Real Name, BlizzBugsSuck has blocked this.")
-		else
-			print(string.format("|cffff0000WARNING: The AddOn '%s' attempted to discover your Real Name, BlizzBugsSuck has blocked this.",addon))
-		end
-		return
-	end
-	return BNSendWhisper_orig(presenceID, ...)
-end
