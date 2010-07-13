@@ -87,5 +87,5 @@ do
 		doNotRun = true
 		InterfaceOptionsFrame_OpenToCategory(panel)
 	end
-	hooksecurefunc("InterfaceOptionsFrame_OpenToCategory", function(panel) return InterfaceOptionsFrame_OpenToCategory_Fix(panel) end)
+	hooksecurefunc("InterfaceOptionsFrame_OpenToCategory", InterfaceOptionsFrame_OpenToCategory_Fix)
 end
