@@ -30,34 +30,43 @@ end
 -- fixes the issue with InterfaceOptionsFrame_OpenToCategory not actually opening the Category (and not even scrolling to it)
 do
 	local doNotRun = false
+	local function get_panel_name(panel)
+		local cat = INTERFACEOPTIONS_ADDONCATEGORIES
+		if ( type(panel) == "string" ) then
+			for i, p in pairs(cat) do
+				if p.name == panel then
+					if p.parent then
+						return get_panel_name(p.parent)
+					else
+						return panel
+					end
+				end
+			end
+		elseif ( type(panel) == "table" ) then
+			for i, p in pairs(cat) do
+				if p == panel then
+					if p.parent then
+						return get_panel_name(p.parent)
+					else
+						return panel.name
+					end
+				end
+			end
+		end
+	end
+
 	local function InterfaceOptionsFrame_OpenToCategory_Fix(panel)
 		if InCombatLockdown() then return end
 		if doNotRun then
 			doNotRun = false
 			return
 		end
-		local cat = _G['INTERFACEOPTIONS_ADDONCATEGORIES']
-		local panelName;
-		if ( type(panel) == "string" ) then
-			for i, p in pairs(cat) do
-				if p.name == panel then
-					panelName =  p.parent or panel
-					break
-				end
-			end
-		else
-			for i, p in pairs(cat) do
-				if p == panel then
-					panelName =  p.parent or panel.name
-					break
-				end
-			end
-		end
+		local panelName = get_panel_name(panel);
 		if not panelName then return end -- if its not part of our list return early
 		local noncollapsedHeaders = {}
 		local shownpanels = 0
 		local mypanel 
-		for i, panel in ipairs(cat) do
+		for i, panel in ipairs(INTERFACEOPTIONS_ADDONCATEGORIES) do
 			if not panel.parent or noncollapsedHeaders[panel.parent] then
 				if panel.name == panelName then
 					panel.collapsed = true
