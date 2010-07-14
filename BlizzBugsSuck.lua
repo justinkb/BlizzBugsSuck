@@ -66,11 +66,11 @@ do
 		local noncollapsedHeaders = {}
 		local shownpanels = 0
 		local mypanel 
+		local t = {}
 		for i, panel in ipairs(INTERFACEOPTIONS_ADDONCATEGORIES) do
 			if not panel.parent or noncollapsedHeaders[panel.parent] then
 				if panel.name == panelName then
 					panel.collapsed = true
-					local t={}
 					t.element = panel
 					InterfaceOptionsListButton_ToggleSubCategories(t)
 					noncollapsedHeaders[panel.name] = true
