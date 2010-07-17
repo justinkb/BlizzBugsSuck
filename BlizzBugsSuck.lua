@@ -91,3 +91,13 @@ do
 	end
 	hooksecurefunc("InterfaceOptionsFrame_OpenToCategory", InterfaceOptionsFrame_OpenToCategory_Fix)
 end
+
+-- Fix for minimap ping points not updating as your character moves.
+-- Original code taken from AntiRadarJam by Lombra with permission.
+do
+	MinimapPing:HookScript("OnUpdate", function(self, elapsed)
+		if self.fadeOut or self.timer > MINIMAPPING_FADE_TIMER then
+			Minimap_SetPing(Minimap:GetPingPosition())
+		end
+	end)
+end
