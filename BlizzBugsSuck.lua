@@ -27,9 +27,11 @@ end
 -- Fix incorrect translations in the German Locale.  For whatever reason
 -- Blizzard changed the oneletter time abbreviations to be 3 letter in
 -- the German Locale.
--- Confirmed fixed in Cataclysm. 
 if tocversion < 40000 and GetLocale() == "deDE" then
-	MINUTE_ONELETTER_ABBR = "%d m"
+	if tocversion < 40000 then
+		-- Only this one is fixed in Cataclysm.
+		MINUTE_ONELETTER_ABBR = "%d m"
+	end
 	DAY_ONELETTER_ABBR = "%d d"
 end
 
