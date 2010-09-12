@@ -1,6 +1,9 @@
+local wow_version, wow_build, wow_data, tocversion = GetBuildInfo()
+
 -- UIDropDownMenu FrameLevels do not properly follow their parent and need to be
 -- fixed to prevent the button being under the background.
-do
+-- Confirmed fixed in Cataclysm.
+if tocversion < 40000 then
 	local function FixMenuFrameLevels()
 		for l=1,UIDROPDOWNMENU_MAXLEVELS do
 			for b=1,UIDROPDOWNMENU_MAXBUTTONS do
@@ -24,12 +27,14 @@ end
 -- Fix incorrect translations in the German Locale.  For whatever reason
 -- Blizzard changed the oneletter time abbreviations to be 3 letter in
 -- the German Locale.
-if GetLocale() == "deDE" then
+-- Confirmed fixed in Cataclysm. 
+if tocversion < 40000 and GetLocale() == "deDE" then
 	MINUTE_ONELETTER_ABBR = "%d m"
 	DAY_ONELETTER_ABBR = "%d d"
 end
 
 -- fixes the issue with InterfaceOptionsFrame_OpenToCategory not actually opening the Category (and not even scrolling to it)
+-- Confirmed still broken in Cataclysm as of build 12942
 do
 	local doNotRun = false
 	local function get_panel_name(panel)
@@ -94,7 +99,8 @@ end
 
 -- Fix for minimap ping points not updating as your character moves.
 -- Original code taken from AntiRadarJam by Lombra with permission.
-do
+-- Confirmed fixed in Cataclysm.
+if tocversion < 40000 then
 	MinimapPing:HookScript("OnUpdate", function(self, elapsed)
 		if self.fadeOut or self.timer > MINIMAPPING_FADE_TIMER then
 			Minimap_SetPing(Minimap:GetPingPosition())
