@@ -107,3 +107,75 @@ if tocversion < 40000 then
 		end
 	end)
 end
+
+-- Fix for errors when opening the map that people started finding with
+-- 4.0.3a.  The problem exists because QuestPOIGetQuestIDByVisible does
+-- not sort completed quests to the top.  If there is an uncompleted
+-- quest then Blizzard's implementation of the POI icons breaks since it
+-- assumes that all the buttons from 1 to the last known index exists.
+--
+-- This fix makes the quests sort in the order that the rest of Blizzard's
+-- code assumes they will.
+if tonumber(wow_build) >= 13329 then
+	local QuestMapUpdateAllQuests_blizz = QuestMapUpdateAllQuests
+	local QuestPOIGetQuestIDByVisibleIndex_blizz = QuestPOIGetQuestIDByVisibleIndex
+	local cache = {}
+
+	local function sort_by_completed(a, b)
+		if not a then
+			return false
+		elseif not b then
+			return true
+		end
+
+		-- completed first
+		local a_completed, b_completed = a.isComplete, b.isComplete
+		if a_completed and not b_completed then
+			return true
+		elseif not a_completed and b_completed then
+			return false
+		end
+
+		-- keep original order otherwise
+		return a.i < b.i
+	end
+
+	function QuestMapUpdateAllQuests()
+		for i=1,#cache do
+			if cache[i] then
+				wipe(cache[i])
+			end
+		end
+		local playerMoney = GetMoney();
+		local numEntries = QuestMapUpdateAllQuests_blizz()
+		for i=1,numEntries do
+			local entry = cache[i]
+			if not entry then
+				entry = {}
+				cache[i] = entry
+			end
+			local questId, questLogIndex = QuestPOIGetQuestIDByVisibleIndex_blizz(i)
+			local _, _, _, _, _, _, isComplete = GetQuestLogTitle(questLogIndex)
+			local requiredMoney = GetQuestLogRequiredMoney(questLogIndex)
+			local numObjectives = GetNumQuestLeaderBoards(questLogIndex)
+			if isComplete and isComplete < 0 then
+				isComplete = false
+			elseif numObjectives == 0 and playerMoney >= requiredMoney then
+				isComplete = true
+			end
+			entry.i = i
+			entry.questId = questId
+			entry.questLogIndex = questLogIndex
+			entry.isComplete = isComplete
+		end 
+		sort(cache, sort_by_completed)
+		return numEntries
+	end
+
+	function QuestPOIGetQuestIDByVisibleIndex(i)
+		local entry = cache[i]
+		if not entry then return nil,nil end
+		return entry.questId, entry.questLogIndex
+	end
+
+end
