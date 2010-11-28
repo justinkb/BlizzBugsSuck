@@ -137,7 +137,13 @@ if tonumber(wow_build) >= 13329 then
 		end
 
 		-- keep original order otherwise
-		return a.i < b.i
+		local a_id, b_id = a.i, b.i
+		if not a_id then 
+			return false
+		elseif not b_id then
+			return true
+		end
+		return a_id < b_id
 	end
 
 	function QuestMapUpdateAllQuests()
