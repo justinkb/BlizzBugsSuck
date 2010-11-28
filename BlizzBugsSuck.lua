@@ -36,7 +36,7 @@ if tocversion < 40000 and GetLocale() == "deDE" then
 end
 
 -- fixes the issue with InterfaceOptionsFrame_OpenToCategory not actually opening the Category (and not even scrolling to it)
--- Confirmed still broken in Cataclysm as of build 12942
+-- Confirmed still broken in Cataclysm as of build 13329 (4.0.3a) 
 do
 	local doNotRun = false
 	local function get_panel_name(panel)
@@ -66,10 +66,7 @@ do
 
 	local function InterfaceOptionsFrame_OpenToCategory_Fix(panel)
 		if InCombatLockdown() then return end
-		if doNotRun then
-			doNotRun = false
-			return
-		end
+		if doNotRun then return end
 		local panelName = get_panel_name(panel);
 		if not panelName then return end -- if its not part of our list return early
 		local noncollapsedHeaders = {}
@@ -95,6 +92,7 @@ do
 		InterfaceOptionsFrameAddOnsListScrollBar:SetValue((Smax/(shownpanels-15))*(mypanel-2))
 		doNotRun = true
 		InterfaceOptionsFrame_OpenToCategory(panel)
+		doNotRun = false
 	end
 	hooksecurefunc("InterfaceOptionsFrame_OpenToCategory", InterfaceOptionsFrame_OpenToCategory_Fix)
 end
