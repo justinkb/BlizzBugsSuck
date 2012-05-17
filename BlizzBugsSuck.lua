@@ -185,3 +185,19 @@ if tonumber(wow_build) >= 13329 then
 	end
 
 end
+
+
+-- Fix for whisper menu options and chat links for cross-realm players in LFR and BGs
+-- Name parsing currently fails when server names contain spaces, so re-issue them without spaces
+do
+  hooksecurefunc("ChatFrame_SendTell", 
+    function(name,...) 
+       if name:find("%s") then 
+          if ACTIVE_CHAT_EDIT_BOX then 
+	     ChatEdit_OnHide(ACTIVE_CHAT_EDIT_BOX) 
+	  end; 
+	  ChatFrame_SendTell(name:gsub("%s",""),...) 
+       end 
+    end)
+end
+
