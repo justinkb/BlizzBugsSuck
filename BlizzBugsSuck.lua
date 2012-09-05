@@ -155,3 +155,20 @@ do
     end)
 end
 
+-- Fix an issue where the GlyphUI depends on the TalentUI but doesn't
+-- always load it.  This issue will manafest with an error like this:
+-- attempt to index global "PlayerTalentFrame" (a nil value)
+-- More details and the report to Blizzard here:
+-- http://us.battle.net/wow/en/forum/topic/6470967787
+if tonumber(wow_build) >= 16016 then
+	local frame = CreateFrame("Frame")
+
+	local function OnEvent(self, event, name)
+		if event == "ADDON_LOADED" and name == "Blizzard_GlyphUI" then
+			TalentFrame_LoadUI()
+		end
+	end
+
+	frame:SetScript("OnEvent",OnEvent)
+	frame:RegisterEvent("ADDON_LOADED")
+end
