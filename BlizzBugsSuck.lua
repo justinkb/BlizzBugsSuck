@@ -1,38 +1,11 @@
 local wow_version, wow_build, wow_data, tocversion = GetBuildInfo()
 wow_build = tonumber(wow_build)
 
--- UIDropDownMenu FrameLevels do not properly follow their parent and need to be
--- fixed to prevent the button being under the background.
--- Confirmed fixed in Cataclysm.
-if tocversion < 40000 then
-	local function FixMenuFrameLevels()
-		for l=1,UIDROPDOWNMENU_MAXLEVELS do
-			for b=1,UIDROPDOWNMENU_MAXBUTTONS do
-				local button = _G["DropDownList"..l.."Button"..b]
-				if button then 
-					local button_parent = button:GetParent()
-					if button_parent then 
-						local button_level = button:GetFrameLevel()
-						local parent_level = button_parent:GetFrameLevel()
-						if button_level <= parent_level then 
-							button:SetFrameLevel(parent_level + 2) 
-						end  
-					end  
-				end  
-			end  
-		end  
-	end
-	hooksecurefunc("UIDropDownMenu_CreateFrames", FixMenuFrameLevels)
-end
-
 -- Fix incorrect translations in the German Locale.  For whatever reason
 -- Blizzard changed the oneletter time abbreviations to be 3 letter in
 -- the German Locale.
-if tocversion < 40000 and GetLocale() == "deDE" then
-	if tocversion < 40000 then
-		-- Only this one is fixed in Cataclysm.
-		MINUTE_ONELETTER_ABBR = "%d m"
-	end
+if GetLocale() == "deDE" then
+	-- This one confirmed still bugged as of Mists of Pandaria build 16030
 	DAY_ONELETTER_ABBR = "%d d"
 end
 
@@ -96,17 +69,6 @@ do
 		doNotRun = false
 	end
 	hooksecurefunc("InterfaceOptionsFrame_OpenToCategory", InterfaceOptionsFrame_OpenToCategory_Fix)
-end
-
--- Fix for minimap ping points not updating as your character moves.
--- Original code taken from AntiRadarJam by Lombra with permission.
--- Confirmed fixed in Cataclysm.
-if tocversion < 40000 then
-	MinimapPing:HookScript("OnUpdate", function(self, elapsed)
-		if self.fadeOut or self.timer > MINIMAPPING_FADE_TIMER then
-			Minimap_SetPing(Minimap:GetPingPosition())
-		end
-	end)
 end
 
 -- Fix for errors when opening the map that people started finding with
