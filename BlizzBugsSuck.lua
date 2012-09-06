@@ -1,7 +1,7 @@
 local wow_version, wow_build, wow_data, tocversion = GetBuildInfo()
 
 -- fixes the issue with InterfaceOptionsFrame_OpenToCategory not actually opening the Category (and not even scrolling to it)
--- Confirmed still broken in Cataclysm as of build 13329 (4.0.3a) 
+-- Confirmed still broken in Mists of Pandaria as of build 16016 (5.0.4) 
 do
 	local doNotRun = false
 	local function get_panel_name(panel)
@@ -70,7 +70,9 @@ end
 --
 -- This fix makes the quests sort in the order that the rest of Blizzard's
 -- code assumes they will.
-if tonumber(wow_build) >= 13329 then
+--
+-- Confirmed fixed in 5.0.4 aka build 16016
+if tonumber(wow_build) < 16016 then
 	local QuestMapUpdateAllQuests_blizz = QuestMapUpdateAllQuests
 	local QuestPOIGetQuestIDByVisibleIndex_blizz = QuestPOIGetQuestIDByVisibleIndex
 	local cache = {}
@@ -143,7 +145,8 @@ end
 
 -- Fix for whisper menu options and chat links for cross-realm players in LFR and BGs
 -- Name parsing currently fails when server names contain spaces, so re-issue them without spaces
-do
+-- Confirmed fixed in 5.0.4 aka build 16016
+if tonumber(wow_build) < 16016 then
   hooksecurefunc("ChatFrame_SendTell", 
     function(name,...) 
        if name:find("%s") then 
