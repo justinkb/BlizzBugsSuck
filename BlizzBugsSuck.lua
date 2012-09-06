@@ -147,15 +147,15 @@ end
 -- Name parsing currently fails when server names contain spaces, so re-issue them without spaces
 -- Confirmed fixed in 5.0.4 aka build 16016
 if tonumber(wow_build) < 16016 then
-  hooksecurefunc("ChatFrame_SendTell", 
-    function(name,...) 
-       if name:find("%s") then 
-          if ACTIVE_CHAT_EDIT_BOX then 
-	     ChatEdit_OnHide(ACTIVE_CHAT_EDIT_BOX) 
-	  end; 
-	  ChatFrame_SendTell(name:gsub("%s",""),...) 
-       end 
-    end)
+	hooksecurefunc("ChatFrame_SendTell", 
+	function(name,...) 
+		if name:find("%s") then 
+			if ACTIVE_CHAT_EDIT_BOX then 
+				ChatEdit_OnHide(ACTIVE_CHAT_EDIT_BOX) 
+			end; 
+			ChatFrame_SendTell(name:gsub("%s",""),...) 
+		end 
+	end)
 end
 
 -- Fix an issue where the GlyphUI depends on the TalentUI but doesn't
