@@ -1,4 +1,5 @@
 local wow_version, wow_build, wow_data, tocversion = GetBuildInfo()
+wow_build = tonumber(wow_build)
 
 -- fixes the issue with InterfaceOptionsFrame_OpenToCategory not actually opening the Category (and not even scrolling to it)
 -- Confirmed still broken in Mists of Pandaria as of build 16016 (5.0.4) 
@@ -72,7 +73,7 @@ end
 -- code assumes they will.
 --
 -- Confirmed fixed in 5.0.4 aka build 16016
-if tonumber(wow_build) < 16016 then
+if wow_build < 16016 then
 	local QuestMapUpdateAllQuests_blizz = QuestMapUpdateAllQuests
 	local QuestPOIGetQuestIDByVisibleIndex_blizz = QuestPOIGetQuestIDByVisibleIndex
 	local cache = {}
@@ -146,7 +147,7 @@ end
 -- Fix for whisper menu options and chat links for cross-realm players in LFR and BGs
 -- Name parsing currently fails when server names contain spaces, so re-issue them without spaces
 -- Confirmed fixed in 5.0.4 aka build 16016
-if tonumber(wow_build) < 16016 then
+if wow_build < 16016 then
 	hooksecurefunc("ChatFrame_SendTell", 
 	function(name,...) 
 		if name:find("%s") then 
@@ -163,7 +164,7 @@ end
 -- attempt to index global "PlayerTalentFrame" (a nil value)
 -- More details and the report to Blizzard here:
 -- http://us.battle.net/wow/en/forum/topic/6470967787
-if tonumber(wow_build) >= 16016 then
+if wow_build >= 16016 then
 	local frame = CreateFrame("Frame")
 
 	local function OnEvent(self, event, name)
