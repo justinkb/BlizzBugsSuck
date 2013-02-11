@@ -5,4 +5,10 @@
 ## DefaultState: enabled
 ## Version: @project-version@
 
+## OptionalDeps: LibChatAnims
+## X-Embeds: LibChatAnims
+
+embeds.xml
+
 BlizzBugsSuck.lua
+
