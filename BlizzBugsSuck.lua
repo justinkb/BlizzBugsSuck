@@ -98,3 +98,12 @@ end
 
 -- Fixed by embedding LibChatAnims
 
+-- Fix an issue where the "DEATH" StaticPopup is wrongly shown when reloading the
+-- UI.  The cause of the problem is in UIParent.lua around line 889; it seems
+-- GetReleaseTimeRemaining is wrongly returning a non-zero value on the first
+-- PLAYER_ENTERING_WORLD event.
+hooksecurefunc("StaticPopup_Show", function(which)
+	if which == "DEATH" and not UnitIsDeadOrGhost("player") then
+		StaticPopup_Hide("DEATH")
+	end
+end)
