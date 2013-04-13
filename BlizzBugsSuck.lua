@@ -10,7 +10,7 @@ if GetLocale() == "deDE" then
 end
 
 -- fixes the issue with InterfaceOptionsFrame_OpenToCategory not actually opening the Category (and not even scrolling to it)
--- Confirmed still broken in Mists of Pandaria as of build 16016 (5.0.4) 
+-- Confirmed still broken in Mists of Pandaria as of build 16016 (5.0.4)
 do
 	local doNotRun = false
 	local function get_panel_name(panel)
@@ -45,7 +45,7 @@ do
 		if not panelName then return end -- if its not part of our list return early
 		local noncollapsedHeaders = {}
 		local shownpanels = 0
-		local mypanel 
+		local mypanel
 		local t = {}
 		for i, panel in ipairs(INTERFACEOPTIONS_ADDONCATEGORIES) do
 			if not panel.parent or noncollapsedHeaders[panel.parent] then
@@ -103,7 +103,40 @@ end
 -- GetReleaseTimeRemaining is wrongly returning a non-zero value on the first
 -- PLAYER_ENTERING_WORLD event.
 hooksecurefunc("StaticPopup_Show", function(which)
-	if which == "DEATH" and not UnitIsDeadOrGhost("player") then
+	if which == "DEATH" and not UnitIsDead("player") then
 		StaticPopup_Hide("DEATH")
 	end
 end)
+
+-- Fix an issue where GetTradeSkillReagentItemLink always returns nil in 5.2,
+-- breaking click functionality on reagents in the tradeskill UI.
+do
+	local function FixTradeSkillReagents()
+		local function TradeSkillReagent_OnClick(self)
+			local link, name = GetTradeSkillReagentItemLink(TradeSkillFrame.selectedSkill, self:GetID())
+			if not link then
+				name, link = GameTooltip:GetItem()
+				if name ~= self.name:GetText() then
+					return
+				end
+			end
+			HandleModifiedItemClick(link)
+		end
+		for i = 1, 8 do
+			_G["TradeSkillReagent"..i]:SetScript("OnClick", TradeSkillReagent_OnClick)
+		end
+	end
+	if TradeSkillReagent1 then
+		FixTradeSkillReagents()
+	else
+		local f = CreateFrame("Frame")
+		f:RegisterEvent("ADDON_LOADED")
+		f:SetScript("OnEvent", function(f, e, a)
+			if a == "Blizzard_TradeSkillUI" then
+				FixTradeSkillReagents()
+				f:UnregisterAllEvents()
+				f:SetScript("OnEvent", nil)
+			end
+		end)
+	end
+end
