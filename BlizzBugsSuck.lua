@@ -12,16 +12,29 @@ end
 -- fixes the issue with InterfaceOptionsFrame_OpenToCategory not actually opening the Category (and not even scrolling to it)
 -- Confirmed still broken in Mists of Pandaria as of build 16016 (5.0.4)
 do
-	local doNotRun = false
 	local function get_panel_name(panel)
-		local categories = INTERFACEOPTIONS_ADDONCATEGORIES
-		for i = 1, #categories do
-			local p = categories[i]
-			if p == panel or p.name == panel then
-				if p.parent then
-					return get_panel_name(p.parent)
-				else
-					return panel
+		local tp = type(panel)
+		local cat = INTERFACEOPTIONS_ADDONCATEGORIES
+		if tp == "string" then
+			for i = 1, #cat do
+				local p = cat[i]
+				if p.name == panel then
+					if p.parent then
+						return get_panel_name(p.parent)
+					else
+						return panel
+					end
+				end
+			end
+		elseif tp == "table" then
+			for i = 1, #cat do
+				local p = cat[i]
+				if p == panel then
+					if p.parent then
+						return get_panel_name(p.parent)
+					else
+						return panel.name
+					end
 				end
 			end
 		end
@@ -35,9 +48,9 @@ do
 		local shownpanels = 0
 		local mypanel
 		local t = {}
-		local categories = INTERFACEOPTIONS_ADDONCATEGORIES
-		for i = 1, #categories do
-			local panel = categories[i]
+		local cat = INTERFACEOPTIONS_ADDONCATEGORIES
+		for i = 1, #cat do
+			local panel = cat[i]
 			if not panel.parent or noncollapsedHeaders[panel.parent] then
 				if panel.name == panelName then
 					panel.collapsed = true
@@ -58,6 +71,7 @@ do
 		InterfaceOptionsFrame_OpenToCategory(panel)
 		doNotRun = false
 	end
+
 	hooksecurefunc("InterfaceOptionsFrame_OpenToCategory", InterfaceOptionsFrame_OpenToCategory_Fix)
 end
 
