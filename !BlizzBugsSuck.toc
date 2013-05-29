@@ -1,14 +1,15 @@
-## Interface: 50200
-## Title: BlizzBugsSuck 
-## Notes: Fixes UI bugs 
-## Author: Shefki, oscarucb, Torhal, Xinhuan, yssaril
-## DefaultState: enabled
+## Interface: 50300
 ## Version: @project-version@
 
-## OptionalDeps: LibChatAnims
-## X-Embeds: LibChatAnims
+## Title: BlizzBugsSuck
+## Notes: Fixes UI bugs
+## Author: Shefki, oscarucb, Torhal, Xinhuan, yssaril
 
-embeds.xml
+## OptionalDeps: LibChatAnims
+
+#@no-lib-strip@
+Libs\LibStub\LibStub.lua
+Libs\LibChatAnims\LibChatAnims.lua
+#@end-no-lib-strip@
 
 BlizzBugsSuck.lua
-

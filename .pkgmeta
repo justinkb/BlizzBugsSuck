@@ -1,4 +1,5 @@
 package-as: '!BlizzBugsSuck'
 
 externals:
+    Libs/LibStub: svn://svn.wowace.com/wow/libstub/mainline/tags/1.0
     Libs/LibChatAnims: svn://svn.wowace.com/wow/libchatanims/mainline/trunk/LibChatAnims
