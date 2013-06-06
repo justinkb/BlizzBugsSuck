@@ -108,3 +108,20 @@ end)
 -- http://forums.wowace.com/showthread.php?p=324936
 
 -- Fixed by embedding LibChatAnims
+
+
+-- Fix an issue where the PetJournal drag buttons cannot be clicked to link a pet into chat
+-- The necessary code is already present, but the buttons are not registered for the correct click
+if true then
+        local frame = CreateFrame("Frame")
+        frame:RegisterEvent("ADDON_LOADED")
+        frame:SetScript("OnEvent", function(self, event, name)
+                if event == "ADDON_LOADED" and name == "Blizzard_PetJournal" then
+			for i=1,3 do
+				local d = _G["PetJournalLoadoutPet"..i]
+				d = d and d.dragButton
+				if d then d:RegisterForClicks("LeftButtonUp") end
+			end
+                end
+        end)
+end
