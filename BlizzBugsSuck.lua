@@ -10,7 +10,7 @@ if GetLocale() == "deDE" then
 end
 
 -- fixes the issue with InterfaceOptionsFrame_OpenToCategory not actually opening the Category (and not even scrolling to it)
--- Confirmed still broken in Mists of Pandaria as of build 16016 (5.0.4)
+-- Confirmed still broken in Mists of Pandaria as of build 17538 (5.4.1)
 do
 	local function get_panel_name(panel)
 		local tp = type(panel)
