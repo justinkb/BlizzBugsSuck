@@ -75,10 +75,7 @@ do
 	hooksecurefunc("InterfaceOptionsFrame_OpenToCategory", InterfaceOptionsFrame_OpenToCategory_Fix)
 end
 
--- Fix an issue where Blizzard's use of UIFrameFlash will prevent
--- the ability to change talents if a user has a separate chat tab
--- for e.g. whispers and also has a chat mod installed or a mod that
--- filters whispers. More info here:
+-- Avoid taint from the UIFrameFlash usage of the chat frames.  More info here:
 -- http://forums.wowace.com/showthread.php?p=324936
 
 -- Fixed by embedding LibChatAnims
