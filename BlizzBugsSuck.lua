@@ -83,6 +83,7 @@ end
 
 -- Fix an issue where the PetJournal drag buttons cannot be clicked to link a pet into chat
 -- The necessary code is already present, but the buttons are not registered for the correct click
+-- Confirmed still broken in Mists of Pandaria as of build 17538 (5.4.1)
 if true then
         local frame = CreateFrame("Frame")
         frame:RegisterEvent("ADDON_LOADED")
