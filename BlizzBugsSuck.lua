@@ -66,7 +66,10 @@ do
 			end
 		end
 		local Smin, Smax = InterfaceOptionsFrameAddOnsListScrollBar:GetMinMaxValues()
-		InterfaceOptionsFrameAddOnsListScrollBar:SetValue((Smax/(shownpanels-15))*(mypanel-2))
+		if shownpanels > 15 and Smin < Smax then 
+		  local val = (Smax/(shownpanels-15))*(mypanel-2)
+		  InterfaceOptionsFrameAddOnsListScrollBar:SetValue(val)
+		end
 		doNotRun = true
 		InterfaceOptionsFrame_OpenToCategory(panel)
 		doNotRun = false
