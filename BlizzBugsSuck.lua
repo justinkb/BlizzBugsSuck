@@ -1,16 +1,20 @@
 local wow_version, wow_build, wow_data, tocversion = GetBuildInfo()
 wow_build = tonumber(wow_build)
 
--- Fix incorrect translations in the German Locale.  For whatever reason
--- Blizzard changed the oneletter time abbreviations to be 3 letter in
--- the German Locale.
+-- Fix incorrect translations in the German localization
 if GetLocale() == "deDE" then
-	-- This one confirmed still bugged as of Mists of Pandaria build 16030
+	-- Day one-letter abbreviation is using a whole word instead of one letter.
+	-- Confirmed still bugged in 6.0.2 build 19034
 	DAY_ONELETTER_ABBR = "%d d"
+	-- Quality 2 (Uncommon) is incorrectly using the same translation as Quality 3 (Rare).
+	-- Previously 2/3 were Selten/Rar; it looks like they meant to update these to match the
+	-- equivalent battle pet quality strings (Ungewöhnlich/Selten) but forgot to finish the job.
+	-- New bug in Warlords of Draenor
+	ITEM_QUALITY2_DESC = BATTLE_PET_BREED_QUALITY3
 end
 
--- fixes the issue with InterfaceOptionsFrame_OpenToCategory not actually opening the Category (and not even scrolling to it)
--- Confirmed still broken in Mists of Pandaria as of build 17538 (5.4.1)
+-- Fix InterfaceOptionsFrame_OpenToCategory not actually opening the category (and not even scrolling to it)
+-- Confirmed still broken in 6.0.2 build 19034
 do
 	local function get_panel_name(panel)
 		local tp = type(panel)
@@ -66,7 +70,7 @@ do
 			end
 		end
 		local Smin, Smax = InterfaceOptionsFrameAddOnsListScrollBar:GetMinMaxValues()
-		if shownpanels > 15 and Smin < Smax then 
+		if shownpanels > 15 and Smin < Smax then
 		  local val = (Smax/(shownpanels-15))*(mypanel-2)
 		  InterfaceOptionsFrameAddOnsListScrollBar:SetValue(val)
 		end
@@ -80,13 +84,11 @@ end
 
 -- Avoid taint from the UIFrameFlash usage of the chat frames.  More info here:
 -- http://forums.wowace.com/showthread.php?p=324936
-
 -- Fixed by embedding LibChatAnims
-
 
 -- Fix an issue where the PetJournal drag buttons cannot be clicked to link a pet into chat
 -- The necessary code is already present, but the buttons are not registered for the correct click
--- Confirmed still broken in Mists of Pandaria as of build 17538 (5.4.1)
+-- Confirmed still broken in 6.0.2 build 19034
 if true then
         local frame = CreateFrame("Frame")
         frame:RegisterEvent("ADDON_LOADED")
