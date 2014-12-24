@@ -44,6 +44,24 @@ if GetLocale() == "deDE" then
 	end)
 end
 
+-- Fix an error in the Traditional Chinese client when the Blizzard_GuildUI loads
+-- Blizzard_GuildUI\Localization.lua:30: attempt to index global 'GuildMainFrameMembersCountLabel' (a nil value)
+-- The error is caused by Blizzard using the wrong global object name.
+-- New bug in 6.0, reported by EKE on WoWInterface.
+if GetLocale() == "zhTW" then
+	-- Create a dummy object to prevent the error:
+	GuildMainFrameMembersCountLabel = { SetPoint = function() end }
+	-- Wait for the Guild UI to load:
+	hooksecurefunc("LoadAddOn", function(name)
+		if name == "Blizzard_GuildUI" then
+			-- Make the intended change using the correct object name:
+			GuildFrameMembersCountLabel:SetPoint("BOTTOMRIGHT", GuildFrameMembersCount, "TOPRIGHT")
+			-- Delete the dummy object:
+			GuildMainFrameMembersCountLabel = nil
+		end
+	end)
+end
+
 -- Fix InterfaceOptionsFrame_OpenToCategory not actually opening the category (and not even scrolling to it)
 -- Confirmed still broken in 6.0.3.19243
 do
