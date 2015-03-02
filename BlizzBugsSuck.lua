@@ -8,6 +8,25 @@ if GetLocale() == "deDE" then
 	DAY_ONELETTER_ABBR = "%d d"
 end
 
+-- Fix category labels in the Interface Options and other windows wrapping and overlapping due to Blizzard
+-- "fixing" how font strings expand from two anchors, but not updating their own UI code to account for this.
+-- New in 6.1
+do
+	local function unwrap(f)
+		for _, button in next, f.buttons do
+			button:GetFontString():SetWordWrap(false)
+		end
+	end
+	unwrap(InterfaceOptionsFrameCategories)
+	unwrap(InterfaceOptionsFrameAddOns)
+	unwrap(VideoOptionsFrameCategoryFrame)
+	hooksecurefunc("LoadAddOn", function(name)
+		if name == "Blizzard_BindingUI" then
+			unwrap(KeyBindingFrameCategoryList)
+		end
+	end)
+end
+
 -- Fix InterfaceOptionsFrame_OpenToCategory not actually opening the category (and not even scrolling to it)
 -- Confirmed still broken in 6.0.3.19243
 do
@@ -81,11 +100,8 @@ end
 -- http://forums.wowace.com/showthread.php?p=324936
 -- Fixed by embedding LibChatAnims
 
--- Fix an issue where the PetJournal drag buttons cannot be clicked to link a pet into chat
--- The necessary code is already present:
--- http://www.townlong-yak.com/framexml/19658/Blizzard_Collections/Blizzard_PetCollection.lua#849
--- but the buttons are not registered for the correct click:
--- http://www.townlong-yak.com/framexml/19658/Blizzard_Collections/Blizzard_PetCollection.xml#600
+-- Fix an issue where the PetJournal drag buttons cannot be clicked to link a pet into chat.
+-- The necessary code is already present, but the buttons are not registered for the correct click.
 -- Confirmed still bugged in 6.1.0.19658
 do
 	local frame = CreateFrame("Frame")
