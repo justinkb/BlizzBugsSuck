@@ -29,7 +29,7 @@ if GetLocale() ~= "enUS" then
 						missionFrame.BonusAreaEffect:SetPoint("CENTER", self.MapTexture, "TOPLEFT", posX, posY)
 						break
 					end
-				else
+				end
 			end)
 			self:UnregisterAllEvents()
 		end
@@ -37,7 +37,7 @@ if GetLocale() ~= "enUS" then
 end
 
 -- Fix InterfaceOptionsFrame_OpenToCategory not actually opening the category (and not even scrolling to it)
--- Confirmed still broken in 6.0.3.19243
+-- Confirmed still broken in 6.2.2.20490 (6.2.2a)
 do
 	local function get_panel_name(panel)
 		local tp = type(panel)
@@ -111,7 +111,7 @@ end
 
 -- Fix an issue where the PetJournal drag buttons cannot be clicked to link a pet into chat.
 -- The necessary code is already present, but the buttons are not registered for the correct click.
--- Confirmed still bugged in 6.1.0.19658
+-- Confirmed still bugged in 6.2.2.20490 (6.2.2a)
 do
 	local frame = CreateFrame("Frame")
 	frame:RegisterEvent("ADDON_LOADED")

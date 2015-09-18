@@ -1,9 +1,9 @@
-## Interface: 60100
+## Interface: 60200
 ## Version: @project-version@
 
 ## Title: BlizzBugsSuck
 ## Notes: Fixes UI bugs
-## Author: Shefki, oscarucb, Torhal, Xinhuan, yssaril
+## Author: Shefki, oscarucb, Torhal, Xinhuan, yssaril, Phanx
 
 ## OptionalDeps: LibChatAnims
 
