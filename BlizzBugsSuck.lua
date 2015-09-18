@@ -4,13 +4,14 @@ wow_build = tonumber(wow_build)
 -- Fix incorrect translations in the German localization
 if GetLocale() == "deDE" then
 	-- Day one-letter abbreviation is using a whole word instead of one letter.
-	-- Confirmed still bugged in 6.1.0.19658
+	-- Confirmed still bugged in 6.2.2.20490 (6.2.2a)
 	DAY_ONELETTER_ABBR = "%d d"
 end
 
 -- Fix missing bonus effects on shipyard map in non-English locales
 -- Problem is caused by Blizzard checking a localized API value
 -- against a hardcoded English string.
+-- New in 6.2, confirmed still bugged in 6.2.2.20490 (6.2.2a)
 if GetLocale() ~= "enUS" then
 	local frame = CreateFrame("Frame")
 	frame:RegisterEvent("ADDON_LOADED")
@@ -31,25 +32,6 @@ if GetLocale() ~= "enUS" then
 				else
 			end)
 			self:UnregisterAllEvents()
-		end
-	end)
-end
-
--- Fix category labels in the Interface Options and other windows wrapping and overlapping due to Blizzard
--- "fixing" how font strings expand from two anchors, but not updating their own UI code to account for this.
--- New in 6.1
-do
-	local function unwrap(f)
-		for _, button in next, f.buttons do
-			button:GetFontString():SetWordWrap(false)
-		end
-	end
-	unwrap(InterfaceOptionsFrameCategories)
-	unwrap(InterfaceOptionsFrameAddOns)
-	unwrap(VideoOptionsFrameCategoryFrame)
-	hooksecurefunc("LoadAddOn", function(name)
-		if name == "Blizzard_BindingUI" then
-			unwrap(KeyBindingFrameCategoryList)
 		end
 	end)
 end
