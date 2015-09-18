@@ -8,6 +8,33 @@ if GetLocale() == "deDE" then
 	DAY_ONELETTER_ABBR = "%d d"
 end
 
+-- Fix missing bonus effects on shipyard map in non-English locales
+-- Problem is caused by Blizzard checking a localized API value
+-- against a hardcoded English string.
+if GetLocale() ~= "enUS" then
+	local frame = CreateFrame("Frame")
+	frame:RegisterEvent("ADDON_LOADED")
+	frame:SetScript("OnEvent", function(self, event, name)
+		if name == "Blizzard_GarrisonUI" then
+			hooksecurefunc("GarrisonShipyardMap_SetupBonus", function(self, missionFrame, mission)
+				if (mission.typePrefix == "ShipMissionIcon-Bonus" and not missionFrame.bonusRewardArea) then
+					missionFrame.bonusRewardArea = true
+					for id, reward in pairs(mission.rewards) do
+						local posX = reward.posX or 0
+						local posY = reward.posY or 0
+						posY = posY * -1
+						missionFrame.BonusAreaEffect:SetAtlas(reward.textureAtlas, true)
+						missionFrame.BonusAreaEffect:ClearAllPoints()
+						missionFrame.BonusAreaEffect:SetPoint("CENTER", self.MapTexture, "TOPLEFT", posX, posY)
+						break
+					end
+				else
+			end)
+			self:UnregisterAllEvents()
+		end
+	end)
+end
+
 -- Fix category labels in the Interface Options and other windows wrapping and overlapping due to Blizzard
 -- "fixing" how font strings expand from two anchors, but not updating their own UI code to account for this.
 -- New in 6.1
