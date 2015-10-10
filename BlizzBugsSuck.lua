@@ -137,7 +137,7 @@ do
 	_G.AddonTooltip_Update = function(owner, ...) 
 		if AddonList and AddonList:IsMouseOver() then
 			local id = owner and owner.GetID and owner:GetID()
-			if id > 0 and id <= GetNumAddOns() then
+			if id and id > 0 and id <= GetNumAddOns() then
 				orig(owner, ...) 
 				return
 			end
