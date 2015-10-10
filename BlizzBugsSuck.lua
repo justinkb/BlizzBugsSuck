@@ -127,3 +127,22 @@ do
 		end
 	end)
 end
+
+-- Fix a lua error when scrolling the in-game Addon list, where the mouse
+-- passes over a world object that activates GameTooltip.
+-- Caused because the FrameXML code erroneously assumes it exclusively owns the GameTooltip object
+-- Confirmed still bugged in 6.2.2.20574
+do
+	local orig = AddonTooltip_Update
+	_G.AddonTooltip_Update = function(owner, ...) 
+		if AddonList and AddonList:IsMouseOver() then
+			local id = owner and owner.GetID and owner:GetID()
+			if id > 0 and id <= GetNumAddOns() then
+				orig(owner, ...) 
+				return
+			end
+		end
+		--print("ADDON LIST FIX ACTIVATED") 
+	end
+end
+
