@@ -8,6 +8,19 @@ if GetLocale() == "deDE" then
 	DAY_ONELETTER_ABBR = "%d d"
 end
 
+-- Fix error when mousing over the Nameplate Motion Type dropdown in
+-- Interface Options > Names panel if the current setting isn't listed.
+-- Happens if the user had previously selected the Spreading Nameplates
+-- option, which was removed from the game in 7.0.
+do
+	local OnEnter = InterfaceOptionsNamesPanelUnitNameplatesMotionDropDown:GetScript("OnEnter")
+	InterfaceOptionsNamesPanelUnitNameplatesMotionDropDown:SetScript("OnEnter", function(self)
+		if self.tooltip then
+			OnEnter(self)
+		end
+	end)
+end
+
 -- Fix missing bonus effects on shipyard map in non-English locales
 -- Problem is caused by Blizzard checking a localized API value
 -- against a hardcoded English string.
