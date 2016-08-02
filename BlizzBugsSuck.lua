@@ -4,14 +4,14 @@ wow_build = tonumber(wow_build)
 -- Fix incorrect translations in the German localization
 if GetLocale() == "deDE" then
 	-- Day one-letter abbreviation is using a whole word instead of one letter.
-	-- Confirmed still bugged in 6.2.2.20490 (6.2.2a)
+	-- Confirmed still bugged in 7.0.3.22293
 	DAY_ONELETTER_ABBR = "%d d"
 end
 
 -- Fix missing bonus effects on shipyard map in non-English locales
 -- Problem is caused by Blizzard checking a localized API value
 -- against a hardcoded English string.
--- New in 6.2, confirmed still bugged in 6.2.2.20490 (6.2.2a)
+-- New in 6.2, confirmed still bugged in 7.0.3.22293
 if GetLocale() ~= "enUS" then
 	local frame = CreateFrame("Frame")
 	frame:RegisterEvent("ADDON_LOADED")
@@ -109,29 +109,10 @@ end
 -- http://forums.wowace.com/showthread.php?p=324936
 -- Fixed by embedding LibChatAnims
 
--- Fix an issue where the PetJournal drag buttons cannot be clicked to link a pet into chat.
--- The necessary code is already present, but the buttons are not registered for the correct click.
--- Confirmed still bugged in 6.2.2.20490 (6.2.2a)
-do
-	local frame = CreateFrame("Frame")
-	frame:RegisterEvent("ADDON_LOADED")
-	frame:SetScript("OnEvent", function(self, event, name)
-		if name == "Blizzard_Collections" then
-			for i = 1, 3 do
-				local button = _G["PetJournalLoadoutPet"..i]
-				if button and button.dragButton then
-					button.dragButton:RegisterForClicks("LeftButtonUp")
-				end
-			end
-			self:UnregisterAllEvents()
-		end
-	end)
-end
-
 -- Fix a lua error when scrolling the in-game Addon list, where the mouse
 -- passes over a world object that activates GameTooltip.
 -- Caused because the FrameXML code erroneously assumes it exclusively owns the GameTooltip object
--- Confirmed still bugged in 6.2.2.20574
+-- Confirmed still bugged in 7.0.3.22293
 do
 	local orig = AddonTooltip_Update
 	_G.AddonTooltip_Update = function(owner, ...) 
