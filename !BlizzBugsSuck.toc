@@ -1,15 +1,8 @@
-## Interface: 70000
-## Version: @project-version@
+## Interface: 90002
+## Version: 9.0.2.0
 
 ## Title: BlizzBugsSuck
 ## Notes: Fixes UI bugs
 ## Author: Shefki, oscarucb, Torhal, Xinhuan, yssaril, Phanx
-
-## OptionalDeps: LibChatAnims
-
-#@no-lib-strip@
-Libs\LibStub\LibStub.lua
-Libs\LibChatAnims\LibChatAnims.lua
-#@end-no-lib-strip@
 
 BlizzBugsSuck.lua
